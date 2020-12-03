@@ -184,6 +184,8 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         this.flutterPluginBinding = binding;
+        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "crazecoder/flutter_bugly");
+        channel.setMethodCallHandler(this);
     }
 
     @Override
@@ -194,8 +196,6 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "crazecoder/flutter_bugly");
-        channel.setMethodCallHandler(this);
     }
 
     @Override
