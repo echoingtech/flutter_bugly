@@ -9,6 +9,11 @@ import com.crazecoder.flutterbugly.utils.JsonUtil;
 import com.crazecoder.flutterbugly.utils.MapUtil;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import io.flutter.BuildConfig;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -41,7 +46,7 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
     }
 
     @Override
-    public void onMethodCall(final MethodCall call, final Result result) {
+    public void onMethodCall(final MethodCall call, @NonNull final Result result) {
         isResultSubmitted = false;
         this.result = result;
         if (call.method.equals("initBugly")) {
@@ -85,6 +90,50 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
                 //        channel.invokeMethod("onCheckUpgrade", data);
                 //    }
                 //};
+                
+                // if (call.hasArgument("autoInit")) {
+                //     Beta.autoInit = false;
+                // }
+                // if (call.hasArgument("enableHotfix")) {
+                //     Beta.enableHotfix = call.argument("enableHotfix");
+                // }
+                // if (call.hasArgument("autoCheckUpgrade")) {
+                //     Beta.autoCheckUpgrade = call.argument("autoCheckUpgrade");
+                // }
+                // if (call.hasArgument("autoDownloadOnWifi")) {
+                //     Beta.autoDownloadOnWifi = call.argument("autoDownloadOnWifi");
+                // }
+                // if (call.hasArgument("initDelay")) {
+                //     int delay = call.argument("initDelay");
+                //     Beta.initDelay = delay * 1000;
+                // }
+                // if (call.hasArgument("enableNotification")) {
+                //     Beta.enableNotification = call.argument("enableNotification");
+                // }
+                // if (call.hasArgument("upgradeCheckPeriod")) {
+                //     int period = call.argument("upgradeCheckPeriod");
+                //     Beta.upgradeCheckPeriod = period * 1000;
+                // }
+                // if (call.hasArgument("showInterruptedStrategy")) {
+                //     Beta.showInterruptedStrategy = call.argument("showInterruptedStrategy");
+                // }
+                // if (call.hasArgument("canShowApkInfo")) {
+                //     Beta.canShowApkInfo = call.argument("canShowApkInfo");
+                // }
+                // if (call.hasArgument("customUpgrade")) {
+                //     boolean customUpgrade = call.argument("customUpgrade");
+                //     /*在application中初始化时设置监听，监听策略的收取*/
+                //     Beta.upgradeListener = customUpgrade ? new UpgradeListener() {
+                //         @Override
+                //         public void onUpgrade(int ret, UpgradeInfo strategy, boolean isManual, boolean isSilence) {
+                //             Map<String, Object> data = new HashMap<>();
+                //             data.put("upgradeInfo", JsonUtil.toJson(MapUtil.deepToMap(strategy)));
+                //             channel.invokeMethod("onCheckUpgrade", data);
+                //         }
+                //     } : null;
+                // }
+                // Beta.canShowUpgradeActs.add(activity.getClass());
+
                 String appId = call.argument("appId").toString();
                 Bugly.init(activity.getApplicationContext(), appId, BuildConfig.DEBUG);
                 CrashReport.initCrashReport(activity.getApplicationContext(), appId, BuildConfig.DEBUG);
@@ -183,6 +232,7 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+        flutterPluginBinding = null;
     }
 
     @Override
@@ -202,6 +252,6 @@ public class FlutterBuglyPlugin implements FlutterPlugin, MethodCallHandler, Act
 
     @Override
     public void onDetachedFromActivity() {
-        flutterPluginBinding = null;
+        
     }
 }
